@@ -31,8 +31,11 @@ def get_ip_address(domain):
         return None
 
 
-def ali_ipcity_ip(ip_addr, appcode):
-    url = "https://ipcity.market.alicloudapi.com/ip/city/query"
+def ali_ipcity_ip(ip_addr, appcode, is_v6=False):
+    if is_v6:
+        url = "https://ipv6city.market.alicloudapi.com/ip/ipv6/query"
+    else:
+        url = "https://ipcity.market.alicloudapi.com/ip/city/query"
     headers = {"Authorization": "APPCODE {}".format(appcode)}
     params = {"ip": ip_addr}
     response = requests.get(url, headers=headers, params=params)
@@ -58,8 +61,7 @@ def kimmy_ip(ip_addr):
 
 def ipapi_ip(ip_addr):
     url = f"http://ip-api.com/json/{ip_addr}"
-    params = {"lang": "zh-CN"}
-    response = requests.get(url, params=params)
+    response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
         if data["status"] == "success":

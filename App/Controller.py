@@ -33,21 +33,21 @@ class BotRunner(object):
         async def handle_ip(message):
             command_args = message.text.split()
             if len(command_args) == 1:
-                await bot.reply_to(message, "格式错误, 格式应为 /ip [IP]")
+                await bot.reply_to(message, "格式错误, 格式应为 /ip [IP/Domain]")
             elif len(command_args) == 2:
                 await Event.handle_ip(bot, message, self.config.ip)
             else:
-                await bot.reply_to(message, "格式错误, 格式应为 /ip [IP]")
+                await bot.reply_to(message, "格式错误, 格式应为 /ip [IP/Domain]")
 
         @bot.message_handler(commands=['ip_ali'])
         async def handle_ip(message):
             command_args = message.text.split()
             if len(command_args) == 1:
-                await bot.reply_to(message, "格式错误, 格式应为 /ip_ali [IP]")
+                await bot.reply_to(message, "格式错误, 格式应为 /ip_ali [IP/Domain]")
             elif len(command_args) == 2:
                 await Event.handle_ip_ali(bot, message, self.config.ip)
             else:
-                await bot.reply_to(message, "格式错误, 格式应为 /ip_ali [IP]")
+                await bot.reply_to(message, "格式错误, 格式应为 /ip_ali [IP/Domain]")
 
         @bot.message_handler(commands=['icp'])
         async def handle_icp(message):
