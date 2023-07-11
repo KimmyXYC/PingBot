@@ -69,6 +69,18 @@ class BotRunner(object):
             else:
                 await bot.reply_to(message, "格式错误, 格式应为 /whois [Domain]")
 
+        @bot.message_handler(commands=['dns'])
+        async def handle_dns(message):
+            command_args = message.text.split()
+            if len(command_args) == 1:
+                await bot.reply_to(message, "格式错误, 格式应为 /dns [Domain](Record_Type)")
+            elif len(command_args) == 2:
+                await Event.handle_dns(bot, message, "A")
+            elif len(command_args) == 3:
+                await Event.handle_dns(bot, message, command_args[2])
+            else:
+                await bot.reply_to(message, "格式错误, 格式应为 /dns [Domain](Record_Type)")
+
         from telebot import asyncio_filters
         bot.add_custom_filter(asyncio_filters.IsAdminFilter(bot))
         bot.add_custom_filter(asyncio_filters.ChatFilter())

@@ -5,7 +5,11 @@ from Utils.IP import *
 
 async def start(bot, message):
     _url = "https://github.com/KimmyXYC/PingBot"
-    _info = "/ip 查询IP地址\n/ip_ali 查询IP地址(阿里源)\n/icp 查询域名备案信息\n/whois 查询域名Whois信息\n"
+    _info = "/ip 查询 IP 地址\n" \
+            "/ip_ali 查询 IP 地址(阿里源)\n" \
+            "/icp 查询域名备案信息\n" \
+            "/whois 查询域名 Whois 信息\n" \
+            "/dns 查询域名 DNS 信息\n"
     await bot.reply_to(
         message,
         f"{_info}开源地址: {_url}",
@@ -32,6 +36,22 @@ async def handle_whois(bot, message):
         return
     whois_info = f"`{result}`"
     await bot.reply_to(message, whois_info, parse_mode="MarkdownV2")
+
+
+async def handle_dns(bot, message, record_type):
+    msg = await bot.reply_to(message, f"DNS lookup {message.text.split()[1]} as {record_type} ...")
+    status, result = get_dns_info(message.text.split()[1], record_type)
+    if not status:
+        await bot.edit_message_text(f"请求失败: {result}", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
+        return
+    dns_info = f"CN:\nTime Consume: {result['86'][0]['answer']['time_consume']}\n"
+    dns_info += f"Records: {result['86'][0]['answer']['records']}\n\n"
+    dns_info += f"US:\nTime Consume: {result['01'][0]['answer']['time_consume']}\n"
+    dns_info += f"Records: {result['01'][0]['answer']['records']}\n\n"
+    dns_info += f"HK:\nTime Consume: {result['852'][0]['answer']['time_consume']}\n"
+    dns_info += f"Records: {result['852'][0]['answer']['records']}"
+    dns_info = f"`{dns_info}`"
+    await bot.edit_message_text(dns_info, message.chat.id, msg.message_id, parse_mode="MarkdownV2")
 
 
 async def handle_ip_ali(bot, message, _config):

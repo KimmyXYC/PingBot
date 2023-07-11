@@ -93,3 +93,31 @@ def whois_check(domain):
             "For more information on Whois status codes, please visit https://icann.org/epp")[0]
     else:
         return False, None
+
+
+def get_dns_info(domain, record_type):
+    qtype = {
+        "A": 1,
+        "NS": 2,
+        "CNAME": 5,
+        "MX": 15,
+        "TXT": 16,
+        "AAAA": 28,
+    }
+    if record_type not in qtype.keys():
+        return False, "record_type error"
+    url = f"https://myssl.com/api/v1/tools/dns_query"
+    params = {
+        "qtype": qtype[record_type],
+        "host": domain,
+        "qmode": -1
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        if data["code"] == 0:
+            return True, data["data"]
+        else:
+            return False, data["error"]
+    else:
+        return False, None
