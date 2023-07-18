@@ -95,8 +95,7 @@ def whois_check(domain):
         lines = result.splitlines()
         filtered_result = [line for line in lines if
                            'REDACTED FOR PRIVACY' not in line and 'Please query the' not in line]
-        return True, "\n".join(filtered_result).split(
-            "For more information on Whois status codes, please visit https://icann.org/epp")[0]
+        return True, "\n".join(filtered_result).split("For more information")[0]
     else:
         return False, None
 
