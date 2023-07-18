@@ -24,7 +24,7 @@ async def handle_icp(bot, message):
     msg = await bot.reply_to(message, f"正在查询域名 {message.text.split()[1]} 备案信息...", disable_web_page_preview=True)
     status, data = icp_record_check(message.text.split()[1])
     if not status:
-        await bot.reply_to(message, f"请求失败: {data}")
+        await bot.reply_to(message, f"请求失败: `{data}`")
         return
     if data["icp"] == "未备案":
         icp_info = f"""查询目标： `{message.text.split()[1]}`\n备案状态： `{data["icp"]}`\n"""
@@ -37,7 +37,7 @@ async def handle_whois(bot, message):
     msg = await bot.reply_to(message, f"正在查询域名 {message.text.split()[1]} Whois 信息...", disable_web_page_preview=True)
     status, result = whois_check(message.text.split()[1])
     if not status:
-        await bot.edit_message_text(f"请求失败: {result}", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
+        await bot.edit_message_text(f"请求失败: `{result}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
         return
     await bot.edit_message_text(f"`{result}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
 
@@ -46,7 +46,7 @@ async def handle_dns(bot, message, record_type):
     msg = await bot.reply_to(message, f"DNS lookup {message.text.split()[1]} as {record_type} ...", disable_web_page_preview=True)
     status, result = get_dns_info(message.text.split()[1], record_type)
     if not status:
-        await bot.edit_message_text(f"请求失败: {result}", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
+        await bot.edit_message_text(f"请求失败: `{result}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
         return
     dns_info = f"CN:\nTime Consume: {result['86'][0]['answer']['time_consume']}\n"
     dns_info += f"Records: {result['86'][0]['answer']['records']}\n\n"
@@ -77,7 +77,7 @@ async def handle_ip_ali(bot, message, _config):
         else:
             status, data = ali_ipcity_ip(ip_addr, _config.appcode, True)
         if not status:
-            await bot.edit_message_text(f"请求失败: {data}", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
+            await bot.edit_message_text(f"请求失败: `{data}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
             return
         if _is_url:
             ip_info = f"""查询目标： `{message.text.split()[1]}`\n解析地址： `{ip_addr}`\n"""
