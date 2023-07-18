@@ -97,7 +97,7 @@ async def handle_ip_ali(bot, message, _config):
                 if data["province"]:
                     ip_info += f"""地区： `{data["country"]} - {data["province"]} - {data["city"]}`\n"""
                 else:
-                    ip_info += f"""地区： `{data["country"]}`\n """
+                    ip_info += f"""地区： `{data["country"]}`\n"""
             ip_info += f"""经纬度： `{data["lng"]}, {data["lat"]}`\nISP： `{data["isp"]}`\n组织： `{data["owner"]}`\nAS号： `AS{data["asnumber"]}`"""
         await bot.edit_message_text(ip_info, message.chat.id, msg.message_id, parse_mode="MarkdownV2")
     else:
