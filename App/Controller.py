@@ -27,7 +27,7 @@ class BotRunner(object):
 
         @bot.message_handler(commands=["start", "help"], chat_types=['private'])
         async def handle_command(message):
-            await Event.start(bot, message)
+            await Event.start(bot, message, self.config.ip)
 
         @bot.message_handler(commands=['ip'])
         async def handle_ip(message):

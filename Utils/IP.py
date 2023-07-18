@@ -22,12 +22,17 @@ def check_url(url):
 
 def get_ip_address(domain):
     try:
-        ip_address = socket.gethostbyname(domain)
-        return ip_address
-    except socket.gaierror:
+        addr_info = socket.getaddrinfo(domain, None, socket.AF_UNSPEC)
+        ip_addresses = []
+        for info in addr_info:
+            ip_address = info[4][0]
+            ip_addresses.append(ip_address)
+        return ip_addresses[0]
+    except socket.gaierror as e:
+        logger.error(f"Domain name resolution failed: {e}")
         return None
     except Exception as e:
-        logger.error(e)
+        logger.error(f"Unknown error: {e}")
         return None
 
 
@@ -61,13 +66,14 @@ def kimmy_ip(ip_addr):
 
 def ipapi_ip(ip_addr):
     url = f"http://ip-api.com/json/{ip_addr}"
-    response = requests.get(url)
+    params = {"fields": "status,message,country,regionName,city,lat,lon,isp,org,as,mobile,proxy,hosting,query"}
+    response = requests.get(url, params=params)
     if response.status_code == 200:
         data = response.json()
         if data["status"] == "success":
             return True, data
         else:
-            return False, data["message"]
+            return False, data
 
 
 def icp_record_check(domain):
