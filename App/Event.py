@@ -25,7 +25,7 @@ async def handle_icp(bot, message):
     if data["icp"] == "未备案":
         icp_info = f"""查询目标： `{message.text.split()[1]}`\n备案状态： `{data["icp"]}`\n"""
     else:
-        icp_info = f"""查询目标： `{message.text.split()[1]}`\n备案号： `{data["icp"]}`\n备案主体： `{data["unitName"]}`\n备案性质： `{data["natureName"]}`\n"""
+        icp_info = f"""查询目标： `{message.text.split()[1]}`\n备案号： `{data["icp"]}`\n备案主体： `{data["unitName"]}`\n备案性质： `{data["natureName"]}`\n备案时间： `{data["auditTime"]}`"""
     await bot.reply_to(message, icp_info, parse_mode="MarkdownV2")
 
 
