@@ -37,10 +37,9 @@ async def handle_whois(bot, message):
     msg = await bot.reply_to(message, f"正在查询域名 {message.text.split()[1]} Whois 信息...", disable_web_page_preview=True)
     status, result = whois_check(message.text.split()[1])
     if not status:
-        await bot.reply_to(message, f"请求失败: {result}")
+        await bot.edit_message_text(f"请求失败: {result}", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
         return
-    whois_info = f"`{result}`"
-    await bot.edit_message_text(whois_info, message.chat.id, msg.message_id, parse_mode="MarkdownV2")
+    await bot.edit_message_text(f"`{result}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
 
 
 async def handle_dns(bot, message, record_type):

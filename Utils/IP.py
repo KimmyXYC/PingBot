@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time： 2023/7/10 21:15 
+# @Time: 2023/7/10 21:15 
 # @FileName: IP.py
-# @Software： PyCharm
+# @Software: PyCharm
 # @GitHub: KimmyXYC
 import ipaddress
 import socket
@@ -91,7 +91,10 @@ def icp_record_check(domain):
 def whois_check(domain):
     response = requests.get(f'https://namebeta.com/api/search/check?query={domain}')
     if response.status_code == 200:
-        result = response.json()['whois']['whois']
+        result = response.json()['whois']
+        if "whois" not in result:
+            return False, result
+        result = result['whois']
         lines = result.splitlines()
         filtered_result = [line for line in lines if
                            'REDACTED FOR PRIVACY' not in line and 'Please query the' not in line]
