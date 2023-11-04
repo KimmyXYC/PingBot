@@ -22,7 +22,7 @@ async def start(bot, message, _config):
 
 async def handle_icp(bot, message):
     msg = await bot.reply_to(message, f"正在查询域名 {message.text.split()[1]} 备案信息...", disable_web_page_preview=True)
-    status, data = icp_record_check(message.text.split()[1])
+    status, data = await icp_record_check(message.text.split()[1])
     if not status:
         await bot.reply_to(message, f"请求失败: `{data}`")
         return
@@ -35,7 +35,7 @@ async def handle_icp(bot, message):
 
 async def handle_whois(bot, message):
     msg = await bot.reply_to(message, f"正在查询域名 {message.text.split()[1]} Whois 信息...", disable_web_page_preview=True)
-    status, result = whois_check(message.text.split()[1])
+    status, result = await whois_check(message.text.split()[1])
     if not status:
         await bot.edit_message_text(f"请求失败: `{result}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
         return
@@ -44,7 +44,7 @@ async def handle_whois(bot, message):
 
 async def handle_dns(bot, message, record_type):
     msg = await bot.reply_to(message, f"DNS lookup {message.text.split()[1]} as {record_type} ...", disable_web_page_preview=True)
-    status, result = get_dns_info(message.text.split()[1], record_type)
+    status, result = await get_dns_info(message.text.split()[1], record_type)
     if not status:
         await bot.edit_message_text(f"请求失败: `{result}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
         return
@@ -73,9 +73,9 @@ async def handle_ip_ali(bot, message, _config):
         return
     elif ip_type == "v4" or ip_type == "v6":
         if ip_type == "v4":
-            status, data = ali_ipcity_ip(ip_addr, _config.appcode)
+            status, data = await ali_ipcity_ip(ip_addr, _config.appcode)
         else:
-            status, data = ali_ipcity_ip(ip_addr, _config.appcode, True)
+            status, data = await ali_ipcity_ip(ip_addr, _config.appcode, True)
         if not status:
             await bot.edit_message_text(f"请求失败: `{data}`", message.chat.id, msg.message_id, parse_mode="MarkdownV2")
             return
@@ -84,7 +84,7 @@ async def handle_ip_ali(bot, message, _config):
         else:
             ip_info = f"""查询目标： `{message.text.split()[1]}`\n"""
         if not data["country"]:
-            status, data = kimmy_ip(ip_addr)
+            status, data = await kimmy_ip(ip_addr)
             if status:
                 ip_info += f"""地区： `{data["country"]}`"""
         else:
@@ -107,7 +107,7 @@ async def handle_ip_ali(bot, message, _config):
 async def handle_ip(bot, message, _config):
     msg = await bot.reply_to(message, f"正在查询 {message.text.split()[1]} ...", disable_web_page_preview=True)
     url = message.text.split()[1]
-    status, data = ipapi_ip(url)
+    status, data = await ipapi_ip(url)
     if status:
         if url == data["query"]:
             _is_url = False
@@ -118,7 +118,7 @@ async def handle_ip(bot, message, _config):
                 ip_info = f"""查询目标： `{url}`\n解析地址： `{data["query"]}`\n"""
             else:
                 ip_info = f"""查询目标： `{url}`\n"""
-            status, data = kimmy_ip(data["query"])
+            status, data = await kimmy_ip(data["query"])
             if status:
                 ip_info += f"""地区： `{data["country"]}`"""
         else:
@@ -148,7 +148,7 @@ async def handle_ip(bot, message, _config):
                 ip_info = f"""查询目标： `{message.text.split()[1]}`\n解析地址： `{data["query"]}`\n"""
             else:
                 ip_info = f"""查询目标： `{message.text.split()[1]}`\n"""
-            status, data = kimmy_ip(data["query"])
+            status, data = await kimmy_ip(data["query"])
             if status:
                 ip_info += f"""地区： `{data["country"]}`"""
                 await bot.edit_message_text(ip_info, message.chat.id, msg.message_id, parse_mode="MarkdownV2")
